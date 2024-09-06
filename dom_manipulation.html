@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            width: 60%;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            margin: 0 10px 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .actions button {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Shopping List</h1>
+        <input type="text" id="itemName" placeholder="Item Name">
+        <input type="number" id="itemQuantity" placeholder="Quantity" min="1">
+        <button id="addItem">Add Item</button>
+        <ul id="shoppingList"></ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addItemButton = document.getElementById('addItem');
+            const shoppingList = document.getElementById('shoppingList');
+            const itemNameInput = document.getElementById('itemName');
+            const itemQuantityInput = document.getElementById('itemQuantity');
+
+            function addItem() {
+                const itemName = itemNameInput.value.trim();
+                const itemQuantity = itemQuantityInput.value.trim();
+
+                if (!itemName || !itemQuantity) {
+                    alert('Please enter both item name and quantity.');
+                    return;
+                }
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    ${itemName} - ${itemQuantity}
+                    <div class="actions">
+                        <button onclick="editItem(this)">Edit</button>
+                        <button onclick="removeItem(this)">Remove</button>
+                    </div>
+                `;
+                shoppingList.appendChild(listItem);
+
+                itemNameInput.value = '';
+                itemQuantityInput.value = '';
+            }
+
+            function editItem(button) {
+                const listItem = button.parentElement.parentElement;
+                const [itemName, itemQuantity] = listItem.childNodes[0].textContent.split(' - ');
+
+                itemNameInput.value = itemName.trim();
+                itemQuantityInput.value = itemQuantity.trim();
+
+                listItem.remove();
+            }
+
+            function removeItem(button) {
+                button.parentElement.parentElement.remove();
+            }
+
+            addItemButton.addEventListener('click', addItem);
+        });
+    </script>
+</body>
+</html>
